@@ -1,0 +1,60 @@
+# Fichiers système
+.DS_Store
+Thumbs.db
+
+# Fichiers temporaires
+*.log
+*.tmp
+*.bak
+*.swp
+
+# Fichiers de configuration utilisateur
+.env
+*.tfstate
+*.tfstate.*
+*.auto.tfvars
+*.auto.tfvars.json
+terraform.tfvars
+.terraform/
+.terraform.lock.hcl
+
+# AWS credentials (ne jamais versionner)
+.aws/
+credentials
+config
+
+# Fichiers générés par les scripts
+replication-config.json
+trust-policy.json
+replication-policy.json
+
+# Fichiers de test ou de validation
+samples/*.txt
+samples/*.csv
+
+# GitHub Actions cache
+.github/workflows/*.log
+.github/workflows/*.tmp
+
+# IDEs et éditeurs
+.vscode/
+.idea/
+*.code-workspace
+
+# Python (si tu utilises des scripts Python)
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Node.js (si tu ajoutes une interface ou dashboard)
+node_modules/
+dist/
+build/
+npm-debug.log*
+
+# Docker (si tu conteneurises plus tard)
+*.tar
+*.gz
+*.img
+*.container

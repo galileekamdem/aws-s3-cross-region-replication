@@ -1,0 +1,44 @@
+name: 🔍 Validate S3 Replication Setup
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  validate:
+    name: Check S3 Buckets & IAM Role
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v2
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: us-east-1
+
+    - name: Check source bucket exists
+      run: |
+        aws s3api head-bucket --bucket bucket-virginia-bootcamp || exit 1
+
+    - name: Check destination bucket exists
+      run: |
+        aws s3api head-bucket --bucket my-replica-bucket-california --region us-west-1 || exit 1
+
+    - name: Check versioning on source bucket
+      run: |
+        STATUS=$(aws s3api get-bucket-versioning --bucket bucket-virginia-bootcamp | jq -r '.Status')
+        [ "$STATUS" == "Enabled" ] || exit 1
+
+    - name: Check versioning on destination bucket
+      run: |
+        STATUS=$(aws s3api get-bucket-versioning --bucket my-replica-bucket-california --region us-west-1 | jq -r '.Status')
+        [ "$STATUS" == "Enabled" ] || exit 1
+
+    - name: Check IAM role exists
+      run: |
+        aws iam get-role --role-name s3-replication-role || exit 1
